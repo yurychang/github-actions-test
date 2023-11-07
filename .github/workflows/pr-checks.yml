@@ -10,7 +10,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -36,9 +35,9 @@ jobs:
           ./node_modules
         key: node_modules-${{ runner.os }}-${{ matrix.node-version }}-${{ hashFiles('./package-lock.json') }}
         
-    - run: npm install
-    - run: npm run build --if-present
-    - run: npm test
+    - if: steps.cache-node_modules-restore.outputs.cache-hit != 'true'
+      run: npm install
+    - run: npm run build
 
     - name: Save node_modules
       id: cache-node_modules-save
@@ -47,3 +46,79 @@ jobs:
         path: |
           ./node_modules
         key: node_modules-${{ runner.os }}-${{ matrix.node-version }}-${{ hashFiles('./package-lock.json') }}
+        
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x, 18.x]
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        
+    - uses: actions/checkout@v3
+
+    - name: Restore node_modules
+      id: cache-node_modules-restore
+      uses: actions/cache/restore@v3
+      with:
+        path: |
+          ./node_modules
+        key: node_modules-${{ runner.os }}-${{ matrix.node-version }}-${{ hashFiles('./package-lock.json') }}
+        
+    - if: steps.cache-node_modules-restore.outputs.cache-hit != 'true'
+      run: npm install
+    - run: npm run test
+
+    - name: Save node_modules
+      id: cache-node_modules-save
+      uses: actions/cache/save@v3
+      with:
+        path: |
+          ./node_modules
+        key: node_modules-${{ runner.os }}-${{ matrix.node-version }}-${{ hashFiles('./package-lock.json') }}
+
+  lint:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x, 18.x]
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        
+    - uses: actions/checkout@v3
+
+    - name: Restore node_modules
+      id: cache-node_modules-restore
+      uses: actions/cache/restore@v3
+      with:
+        path: |
+          ./node_modules
+        key: node_modules-${{ runner.os }}-${{ matrix.node-version }}-${{ hashFiles('./package-lock.json') }}
+        
+    - if: steps.cache-node_modules-restore.outputs.cache-hit != 'true'
+      run: npm install
+    - run: npm run lint
+
+    - name: Save node_modules
+      id: cache-node_modules-save
+      uses: actions/cache/save@v3
+      with:
+        path: |
+          ./node_modules
+        key: node_modules-${{ runner.os }}-${{ matrix.node-version }}-${{ hashFiles('./package-lock.json') }}
+
+
