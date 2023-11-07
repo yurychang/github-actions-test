@@ -28,6 +28,10 @@ Run ESLint for source code.
 
 Preview build app on local, should execute `build` script first.
 
+### `npm run test`
+
+Build production bundle to `dist` folder.
+
 ## Tech Stack
 
 ### ESLint
