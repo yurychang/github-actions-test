@@ -51,10 +51,10 @@ jobs:
     
     steps:
     - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Use Node.js ${{ env.NODE_VERSION }}
       uses: actions/setup-node@v3
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: ${{ env.NODE_VERSION }}
         cache: 'npm'
         
     - uses: actions/checkout@v3
@@ -65,7 +65,7 @@ jobs:
       with:
         path: |
           ./node_modules
-        key: node_modules-${{ runner.os }}-${{ matrix.node-version }}-${{ hashFiles('./package-lock.json') }}
+        key: node_modules-${{ runner.os }}-${{ env.NODE_VERSION }}-${{ hashFiles('./package-lock.json') }}
         
     - run: npm run test
 
@@ -75,10 +75,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Use Node.js ${{ env.NODE_VERSION }}
       uses: actions/setup-node@v3
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: ${{ env.NODE_VERSION }}
         cache: 'npm'
         
     - uses: actions/checkout@v3
@@ -89,7 +89,7 @@ jobs:
       with:
         path: |
           ./node_modules
-        key: node_modules-${{ runner.os }}-${{ matrix.node-version }}-${{ hashFiles('./package-lock.json') }}
+        key: node_modules-${{ runner.os }}-${{ env.NODE_VERSION }}-${{ hashFiles('./package-lock.json') }}
         
     - run: npm run lint
 
