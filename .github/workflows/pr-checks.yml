@@ -72,7 +72,7 @@ jobs:
         key: node_modules-${{ runner.os }}-${{ matrix.node-version }}-${{ hashFiles('./package-lock.json') }}
         
     - run: npm install
-    - run: npm test
+    - run: npm run test
 
     - name: Save node_modules
       id: cache-node_modules-save
@@ -108,7 +108,7 @@ jobs:
         key: node_modules-${{ runner.os }}-${{ matrix.node-version }}-${{ hashFiles('./package-lock.json') }}
         
     - run: npm install
-    - run: npm lint
+    - run: npm run lint
 
     - name: Save node_modules
       id: cache-node_modules-save
