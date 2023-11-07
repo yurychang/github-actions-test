@@ -35,7 +35,8 @@ jobs:
           ./node_modules
         key: node_modules-${{ runner.os }}-${{ matrix.node-version }}-${{ hashFiles('./package-lock.json') }}
         
-    - run: npm install
+    - if: steps.cache-node_modules-restore.outputs.cache-hit != 'true'
+      run: npm install
     - run: npm run build
 
     - name: Save node_modules
